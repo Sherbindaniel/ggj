@@ -16,6 +16,9 @@ public class HeroController : MonoBehaviour
     private float moveInput;
     private bool facingRight = true;
 
+    private bool ClimbingAllowed = false;
+   
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -23,16 +26,15 @@ public class HeroController : MonoBehaviour
 
     void Update()
     {
-        // Horizontal input (A/D or Arrow Keys)
         moveInput = Input.GetAxisRaw("Horizontal");
 
-        // Jump
-        if (Input.GetButtonDown("Jump") && isGrounded)
+        
+
+        if (Input.GetButtonDown("Jump") && isGrounded && !ClimbingAllowed)
         {
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
         }
 
-        // Flip character
         if (moveInput > 0 && !facingRight)
             Flip();
         else if (moveInput < 0 && facingRight)
@@ -41,15 +43,9 @@ public class HeroController : MonoBehaviour
 
     void FixedUpdate()
     {
-        // Apply movement
         rb.linearVelocity = new Vector2(moveInput * moveSpeed, rb.linearVelocity.y);
 
-        // Ground check
-        isGrounded = Physics2D.OverlapCircle(
-            groundCheck.position,
-            groundRadius,
-            groundLayer
-        );
+        isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundRadius, groundLayer);
     }
 
     void Flip()
@@ -59,10 +55,9 @@ public class HeroController : MonoBehaviour
         scale.x *= -1;
         transform.localScale = scale;
     }
-    //void OnDrawGizmos()
-    //{
-    //    Gizmos.color = Color.red;
-    //    Gizmos.DrawWireSphere(groundCheck.position, groundRadius);
-    //}
 
+    public void SetClimbing(bool state)
+    {
+        ClimbingAllowed = state;
+    }
 }

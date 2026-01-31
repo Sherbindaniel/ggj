@@ -4,10 +4,10 @@ public class EnemyAI : MonoBehaviour
 {
     [Header("Movement")]
     public float speed = 2f;
-    public float patrolDistance = 5f;
+    public float patrolDistance = 2f;
 
     [Header("Combat")]
-    public float detectionDistance = 3f;
+    public float detectionDistance = 2f;
     public Transform firePoint;
     public GameObject bulletPrefab;
     public float fireRate = 1f;
@@ -36,6 +36,8 @@ public class EnemyAI : MonoBehaviour
     void Patrol()
     {
         float direction = movingRight ? 1 : -1;
+
+        // ✔ Correct velocity usage
         rb.linearVelocity = new Vector2(direction * speed, rb.linearVelocity.y);
 
         if (movingRight && transform.position.x >= startPos.x + patrolDistance)
@@ -47,6 +49,7 @@ public class EnemyAI : MonoBehaviour
 
     void AttackPlayer()
     {
+        // ✔ Stops instantly
         rb.linearVelocity = Vector2.zero;
         Shoot();
     }
@@ -62,7 +65,13 @@ public class EnemyAI : MonoBehaviour
     bool PlayerInSight()
     {
         Vector2 dir = movingRight ? Vector2.right : Vector2.left;
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, dir, detectionDistance, LayerMask.GetMask("Player"));
+        RaycastHit2D hit = Physics2D.Raycast(
+            transform.position,
+            dir,
+            detectionDistance,
+            LayerMask.GetMask("Player")
+        );
+
         return hit.collider != null;
     }
 
@@ -72,7 +81,7 @@ public class EnemyAI : MonoBehaviour
         {
             Vector2 shootDir = movingRight ? Vector2.right : Vector2.left;
 
-            // Spawn bullet slightly outside collider
+            // Spawn bullet slightly in front of enemy
             Vector3 spawnPos = firePoint.position + (Vector3)(shootDir * 0.4f);
 
             GameObject bullet = Instantiate(bulletPrefab, spawnPos, Quaternion.identity);
