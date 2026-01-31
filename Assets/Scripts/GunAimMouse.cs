@@ -39,5 +39,7 @@ public class GunAimMouse : MonoBehaviour
         // Flip sprite so it looks correct when aiming left
         if (gunSprite != null)
             gunSprite.flipY = !mouseOnRight;
+        if (Input.GetMouseButtonDown(0))
+            Debug.Log("CLICK OK");
     }
 }

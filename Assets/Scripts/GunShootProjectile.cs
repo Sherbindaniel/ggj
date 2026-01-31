@@ -23,12 +23,17 @@ public class GunShootProjectile : MonoBehaviour
     {
         if (firePoint == null || bulletPrefab == null) return;
 
-        Vector2 direction = transform.right; // because your gun aims by rotating pivot
+        // ALWAYS use the muzzle direction
+        Vector2 direction = firePoint.right;
 
-        GameObject b = Instantiate(bulletPrefab, firePoint.position, Quaternion.identity);
+        // Spawn bullet with muzzle rotation
+        GameObject b = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
+
         Bullet bullet = b.GetComponent<Bullet>();
-        bullet.hitLayers = hitLayers;
-        bullet.Init(direction);
+        if (bullet != null)
+        {
+            bullet.hitLayers = hitLayers;
+            bullet.Init(direction);
+        }
     }
 }
-
