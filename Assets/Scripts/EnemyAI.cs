@@ -4,16 +4,15 @@ public class EnemyAI : MonoBehaviour
 {
     [Header("Movement")]
     public float speed = 2f;
-    public float patrolDistance = 3f;
+    public float patrolDistance = 5f;
 
     [Header("Combat")]
-    public float detectionDistance = 5f;
+    public float detectionDistance = 3f;
     public Transform firePoint;
     public GameObject bulletPrefab;
     public float fireRate = 1f;
 
     private float nextFireTime = 0f;
-
     private Vector3 startPos;
     private bool movingRight = true;
     private Rigidbody2D rb;
@@ -26,7 +25,7 @@ public class EnemyAI : MonoBehaviour
 
     void Update()
     {
-        Debug.DrawRay(transform.position, (movingRight ? Vector2.right : Vector2.left) * detectionDistance, Color.red);
+        rb.WakeUp();
 
         if (PlayerInSight())
             AttackPlayer();
@@ -46,6 +45,12 @@ public class EnemyAI : MonoBehaviour
             Flip();
     }
 
+    void AttackPlayer()
+    {
+        rb.linearVelocity = Vector2.zero;
+        Shoot();
+    }
+
     void Flip()
     {
         movingRight = !movingRight;
@@ -54,39 +59,26 @@ public class EnemyAI : MonoBehaviour
         transform.localScale = scale;
     }
 
-   bool PlayerInSight()
-{
-    Vector2 dir = movingRight ? Vector2.right : Vector2.left;
-    RaycastHit2D hit = Physics2D.Raycast(transform.position, dir, detectionDistance, LayerMask.GetMask("Player"));
-
-    return hit.collider != null;
-}
-
-
-    void AttackPlayer()
+    bool PlayerInSight()
     {
-        rb.linearVelocity = Vector2.zero;
-        Shoot();
-    }
-
-   void Shoot()
-{
-    if (Time.time >= nextFireTime && bulletPrefab && firePoint)
-    {
-        GameObject bullet = Instantiate(bulletPrefab, firePoint.position, Quaternion.identity);
-
-        Vector2 shootDir = movingRight ? Vector2.right : Vector2.left;
-        bullet.GetComponent<Bullet>().Init(shootDir);
-
-        nextFireTime = Time.time + fireRate;
-    }
-}
-
-
-    void OnDrawGizmos()
-    {
-        Gizmos.color = Color.red;
         Vector2 dir = movingRight ? Vector2.right : Vector2.left;
-        Gizmos.DrawLine(transform.position, transform.position + (Vector3)(dir * detectionDistance));
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, dir, detectionDistance, LayerMask.GetMask("Player"));
+        return hit.collider != null;
+    }
+
+    void Shoot()
+    {
+        if (Time.time >= nextFireTime && bulletPrefab && firePoint)
+        {
+            Vector2 shootDir = movingRight ? Vector2.right : Vector2.left;
+
+            // Spawn bullet slightly outside collider
+            Vector3 spawnPos = firePoint.position + (Vector3)(shootDir * 0.4f);
+
+            GameObject bullet = Instantiate(bulletPrefab, spawnPos, Quaternion.identity);
+            bullet.GetComponent<Bullet>().Init(shootDir, gameObject);
+
+            nextFireTime = Time.time + fireRate;
+        }
     }
 }

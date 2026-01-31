@@ -4,13 +4,14 @@ public class Bullet : MonoBehaviour
 {
     public float speed = 20f;
     public float lifeTime = 2f;
-    public LayerMask hitLayers;
 
     private Vector2 dir;
+    private GameObject owner;
 
-    public void Init(Vector2 direction)
+    public void Init(Vector2 direction, GameObject shooter)
     {
         dir = direction.normalized;
+        owner = shooter;
         Destroy(gameObject, lifeTime);
     }
 
@@ -19,21 +20,18 @@ public class Bullet : MonoBehaviour
         transform.position += (Vector3)(dir * speed * Time.deltaTime);
     }
 
-   void OnTriggerEnter2D(Collider2D other)
-{
-    // Ignore everything except Enemy
-    // if (((1 << other.gameObject.layer) & hitLayers) == 0) return;
-
-    EnemyHealth enemy = other.GetComponentInParent<EnemyHealth>();
-
-    if (enemy != null)
+    void OnTriggerEnter2D(Collider2D other)
     {
-        enemy.TakeDamage(1);
-        Destroy(gameObject);
+        if (other.gameObject == owner) return;
+
+        EnemyHealth enemy = other.GetComponentInParent<EnemyHealth>();
+        if (enemy != null)
+        {
+            enemy.TakeDamage(1);
+
+            // Prevent multiple hits
+            GetComponent<Collider2D>().enabled = false;
+            Destroy(gameObject);
+        }
     }
-}
-
-
-
-
 }

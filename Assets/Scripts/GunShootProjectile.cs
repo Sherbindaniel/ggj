@@ -4,9 +4,7 @@ public class GunShootProjectile : MonoBehaviour
 {
     public Transform firePoint;
     public GameObject bulletPrefab;
-
     public float fireRate = 0.15f;
-    public LayerMask hitLayers;
 
     private float nextFireTime;
 
@@ -23,17 +21,15 @@ public class GunShootProjectile : MonoBehaviour
     {
         if (firePoint == null || bulletPrefab == null) return;
 
-        // ALWAYS use the muzzle direction
         Vector2 direction = firePoint.right;
+        Vector3 spawnPos = firePoint.position + (Vector3)(direction * 0.4f);
 
-        // Spawn bullet with muzzle rotation
-        GameObject b = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
+        GameObject b = Instantiate(bulletPrefab, spawnPos, firePoint.rotation);
 
         Bullet bullet = b.GetComponent<Bullet>();
         if (bullet != null)
         {
-            bullet.hitLayers = hitLayers;
-            bullet.Init(direction);
+            bullet.Init(direction, gameObject);
         }
     }
 }
