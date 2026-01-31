@@ -19,11 +19,21 @@ public class Bullet : MonoBehaviour
         transform.position += (Vector3)(dir * speed * Time.deltaTime);
     }
 
-    void OnTriggerEnter2D(Collider2D other)
-    {
-        if (((1 << other.gameObject.layer) & hitLayers) == 0) return;
+   void OnTriggerEnter2D(Collider2D other)
+{
+    // Ignore everything except Enemy
+    // if (((1 << other.gameObject.layer) & hitLayers) == 0) return;
 
-        // later: damage logic here
+    EnemyHealth enemy = other.GetComponentInParent<EnemyHealth>();
+
+    if (enemy != null)
+    {
+        enemy.TakeDamage(1);
         Destroy(gameObject);
     }
+}
+
+
+
+
 }
