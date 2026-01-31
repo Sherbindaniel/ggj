@@ -3,8 +3,8 @@ using UnityEngine;
 public class HeroController : MonoBehaviour
 {
     [Header("Movement")]
-    public float moveSpeed = 6f;
-    public float jumpForce = 12f;
+    public float moveSpeed = 2f;
+    public float jumpForce = 7f;
 
     [Header("Ground Check")]
     public Transform groundCheck;
