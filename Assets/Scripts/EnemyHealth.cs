@@ -6,13 +6,15 @@ public class EnemyHealth : MonoBehaviour
     private int currentHealth;
     private bool isDead = false;
 
-    void Start()
+    void OnEnable()
     {
         currentHealth = maxHealth;
+        isDead = false;
     }
 
     public void TakeDamage(int amount)
     {
+         Debug.Log("Enemy Hit!");
         if (isDead) return;
 
         currentHealth -= amount;

@@ -1,5 +1,6 @@
 using UnityEngine;
 
+
 public class Bullet : MonoBehaviour
 {
     public float speed = 20f;
@@ -12,7 +13,7 @@ public class Bullet : MonoBehaviour
     {
         dir = direction.normalized;
         owner = shooter;
-        Destroy(gameObject, lifeTime);   // Auto destroy after time
+        Destroy(gameObject, lifeTime);
     }
 
     void Update()
@@ -22,64 +23,50 @@ public class Bullet : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        // Ignore the shooter
+        // Ignore shooter
         if (other.gameObject == owner) return;
 
-        // Damage enemy if applicable
-        EnemyHealth enemy = other.GetComponentInParent<EnemyHealth>();
-        if (enemy != null)
+        // If bullet is from PLAYER → damage ENEMY only
+        if(owner==null)
+            return;
+        if (owner.CompareTag("Player"))
         {
-            enemy.TakeDamage(1);
+            EnemyHealth enemy = other.GetComponentInParent<EnemyHealth>();
+            if (enemy != null)
+            {
+                enemy.TakeDamage(1);
+                Destroy(gameObject);
+                return;
+            }
         }
 
-        // Bullet disappears on ANY collision (ground, wall, ceiling, etc.)
+        // If bullet is from ENEMY → damage PLAYER only
+        if (owner.CompareTag("Enemy"))
+        {
+            PlayerHealth player = other.GetComponentInParent<PlayerHealth>();
+            if (player != null)
+            {
+                player.TakeDamage(1);
+                Destroy(gameObject);
+                return;
+            }
+        }
+
+        // Destroy on any surface hit
         Destroy(gameObject);
     }
 }
 
-
-
-
-
-
-
-
-
-
-// using UnityEngine;
-
-// public class Bullet : MonoBehaviour
+// using UnityEngine.SceneManagement;
+// public class LoadNextLevel
 // {
-//     public float speed = 20f;
-//     public float lifeTime = 2f;
+//     public int levelIndex;
 
-//     private Vector2 dir;
-//     private GameObject owner;
-
-//     public void Init(Vector2 direction, GameObject shooter)
+//     OnTriggerEnter2D(Collider2D other)
 //     {
-//         dir = direction.normalized;
-//         owner = shooter;
-//         Destroy(gameObject, lifeTime);
-//     }
-
-//     void Update()
-//     {
-//         transform.position += (Vector3)(dir * speed * Time.deltaTime);
-//     }
-
-//     void OnTriggerEnter2D(Collider2D other)
-//     {
-//         if (other.gameObject == owner) return;
-
-//         EnemyHealth enemy = other.GetComponentInParent<EnemyHealth>();
-//         if (enemy != null)
+//         if (other.gameObject.CompareTag("Player"))
 //         {
-//             enemy.TakeDamage(1);
-
-//             // Prevent multiple hits
-//             GetComponent<Collider2D>().enabled = false;
-//             Destroy(gameObject);
+//             SceneManager.LoadScene(levelIndex);
 //         }
 //     }
 // }
