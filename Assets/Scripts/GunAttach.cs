@@ -3,31 +3,21 @@ using UnityEngine;
 public class GunAttach : MonoBehaviour
 {
     public Transform player;
-    public Transform firePoint; // drag your FirePoint here
+    public Transform firePoint;
 
     public Vector3 rightOffset = new Vector3(0.6f, 0.1f, 0f);
-    public Vector3 leftOffset = new Vector3(-0.6f, 0.1f, 0f);
+    public Vector3 leftOffset  = new Vector3(-0.6f, 0.1f, 0f);
 
-    void LateUpdate()
-    {
-        if (player == null) return;
+   void LateUpdate()
+{
+    if (player == null) return;
 
-        bool facingRight = player.localScale.x > 0;
+    bool facingRight = Mathf.Approximately(player.eulerAngles.y, 0f);
 
-        // move gun to correct side
-        transform.localPosition = facingRight ? rightOffset : leftOffset;
+    transform.localPosition = facingRight ? rightOffset : leftOffset;
 
-        // flip gun sprite
-        Vector3 s = transform.localScale;
-        s.x = facingRight ? 1f : -1f;
-        transform.localScale = s;
+    if (firePoint != null)
+        firePoint.localRotation = Quaternion.identity;
+}
 
-        // OPTIONAL SAFETY: ensure firePoint always points outward
-        // If your FirePoint is correctly placed as a child, you can skip this.
-        if (firePoint != null)
-        {
-            // Make firePoint's local rotation always zero (inherits flip cleanly)
-            firePoint.localRotation = Quaternion.identity;
-        }
-    }
 }
