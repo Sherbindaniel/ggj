@@ -1,13 +1,13 @@
 using UnityEngine;
 
-public class EnemyAI : MonoBehaviour
+public class Bossai : MonoBehaviour
 {
     [Header("Movement")]
     public float speed = 2f;
-    public float patrolDistance = 2f;
+    public float patrolDistance = 5f;
 
     [Header("Combat")]
-    public float detectionDistance = 2f;
+    public float detectionDistance = 10f;
     public Transform firePoint;
     public GameObject bulletPrefab;
     public float fireRate = 1f;

@@ -1,13 +1,13 @@
 using UnityEngine;
 
-public class EnemyAI : MonoBehaviour
+public class droneai : MonoBehaviour
 {
     [Header("Movement")]
     public float speed = 2f;
     public float patrolDistance = 2f;
 
     [Header("Combat")]
-    public float detectionDistance = 2f;
+    public float detectionRadius = 5f;
     public Transform firePoint;
     public GameObject bulletPrefab;
     public float fireRate = 1f;
@@ -18,20 +18,16 @@ public class EnemyAI : MonoBehaviour
     private Rigidbody2D rb;
     public Transform player;
 
-
-
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         startPos = transform.position;
-          player = GameObject.FindGameObjectWithTag("Player").transform;
+        player = GameObject.FindGameObjectWithTag("Player").transform;
     }
 
     void Update()
     {
-        rb.WakeUp();
-
-       if (PlayerInRange())
+        if (PlayerInRange())
             AttackPlayer();
         else
             Patrol();
@@ -40,8 +36,6 @@ public class EnemyAI : MonoBehaviour
     void Patrol()
     {
         float direction = movingRight ? 1 : -1;
-
-        // ✔ Correct velocity usage
         rb.linearVelocity = new Vector2(direction * speed, rb.linearVelocity.y);
 
         if (movingRight && transform.position.x >= startPos.x + patrolDistance)
@@ -51,23 +45,17 @@ public class EnemyAI : MonoBehaviour
             Flip();
     }
 
-void AttackPlayer()
-{
-    rb.linearVelocity = Vector2.zero;
+    void AttackPlayer()
+    {
+        rb.linearVelocity = Vector2.zero;
 
-    // 🔥 FACE THE PLAYER
-    if (player.position.x > transform.position.x && !movingRight)
-        Flip();
-    else if (player.position.x < transform.position.x && movingRight)
-        Flip();
+        // 👉 Rotate fire point toward player
+        Vector2 dir = (player.position - firePoint.position).normalized;
+        float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+        firePoint.rotation = Quaternion.Euler(0, 0, angle);
 
-    Vector2 dir = (player.position - firePoint.position).normalized;
-    float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
-    firePoint.rotation = Quaternion.Euler(0, 0, angle);
-
-    Shoot(dir);
-}
-
+        Shoot(dir);
+    }
 
     void Flip()
     {
@@ -77,22 +65,9 @@ void AttackPlayer()
         transform.localScale = scale;
     }
 
-    bool PlayerInSight()
+    bool PlayerInRange()
     {
-        Vector2 dir = movingRight ? Vector2.right : Vector2.left;
-        RaycastHit2D hit = Physics2D.Raycast(
-            transform.position,
-            dir,
-            detectionDistance,
-            LayerMask.GetMask("Player")
-        );
-
-        return hit.collider != null;
-    }
-
-      bool PlayerInRange()
-    {
-        return Vector2.Distance(transform.position, player.position) <= detectionDistance;
+        return Vector2.Distance(transform.position, player.position) <= detectionRadius;
     }
 
     void Shoot(Vector2 dir)
@@ -106,12 +81,13 @@ void AttackPlayer()
         }
     }
 
-     void OnDrawGizmos()
+    // 🎯 Draw detection radius and ray to player
+    void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, detectionDistance);
+        Gizmos.DrawWireSphere(transform.position, detectionRadius);
 
-        if (player)
+        if (player != null)
         {
             Gizmos.color = Color.yellow;
             Gizmos.DrawLine(transform.position, player.position);

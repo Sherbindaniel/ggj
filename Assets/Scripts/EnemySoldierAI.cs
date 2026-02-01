@@ -2,79 +2,58 @@ using UnityEngine;
 
 public class EnemySoldierAI : MonoBehaviour
 {
-    [Header("Movement")]
-    public float speed = 2f;
-
     [Header("Combat")]
-    public float detectionDistance = 2f;
+    public float detectionDistance = 3f;
     public Transform firePoint;
     public GameObject bulletPrefab;
     public float fireRate = 1f;
 
     private float nextFireTime = 0f;
-    private bool movingRight = true;
     private Rigidbody2D rb;
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        rb.linearVelocity = Vector2.zero; // Soldier stays still
     }
 
     void Update()
     {
-        rb.WakeUp();
+        rb.linearVelocity = Vector2.zero; // Always stay in place
 
-        if (PlayerInSight())
-            AttackPlayer();
-        else
-            Patrol();
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        if (!player) return;
+
+        float dist = Vector2.Distance(transform.position, player.transform.position);
+
+        if (dist <= detectionDistance)
+        {
+            FacePlayer(player);
+
+            if (Time.time >= nextFireTime)
+            {
+                Shoot(player);
+                nextFireTime = Time.time + fireRate;
+            }
+        }
     }
 
-    void Patrol()
+    void FacePlayer(GameObject player)
     {
-        float direction = movingRight ? 1 : -1;
-
-        rb.linearVelocity = new Vector2(direction * speed, rb.linearVelocity.y);
-    }
-
-    void AttackPlayer()
-    {
-        rb.linearVelocity = Vector2.zero;
-        Shoot();
-    }
-
-    void Flip()
-    {
-        movingRight = !movingRight;
         Vector3 scale = transform.localScale;
-        scale.x *= -1;
+
+        if (player.transform.position.x > transform.position.x)
+            scale.x = Mathf.Abs(scale.x);
+        else
+            scale.x = -Mathf.Abs(scale.x);
+
         transform.localScale = scale;
     }
 
-    bool PlayerInSight()
+    void Shoot(GameObject player)
     {
-        Vector2 dir = movingRight ? Vector2.right : Vector2.left;
-        RaycastHit2D hit = Physics2D.Raycast(
-            transform.position,
-            dir,
-            detectionDistance,
-            LayerMask.GetMask("Player")
-        );
-
-        return hit.collider != null;
-    }
-
-    void Shoot()
-    {
-        if (Time.time >= nextFireTime && bulletPrefab && firePoint)
-        {
-            Vector2 shootDir = movingRight ? Vector2.right : Vector2.left;
-            Vector3 spawnPos = firePoint.position + (Vector3)(shootDir * 0.4f);
-
-            GameObject bullet = Instantiate(bulletPrefab, spawnPos, Quaternion.identity);
-            bullet.GetComponent<Bullet>().Init(shootDir, gameObject);
-
-            nextFireTime = Time.time + fireRate;
-        }
+        Vector2 dir = (player.transform.position - firePoint.position).normalized;
+        GameObject bullet = Instantiate(bulletPrefab, firePoint.position, Quaternion.identity);
+        bullet.GetComponent<Bullet>().Init(dir, gameObject);
     }
 }

@@ -2,12 +2,13 @@ using UnityEngine;
 
 public class BattleManager : MonoBehaviour
 {
-    public GameObject[] wave1Enemies;
-    public GameObject drone;
-    public GameObject[] wave2Enemies;
+    public GameObject[] wave1Enemies;     // 3 soldiers
+    public GameObject[] wave2Drones;      // 2 drones
+    public GameObject[] wave3Enemies;     // 2 soldiers
+    public GameObject[] wave3Drones;      // 2 drones
     public GameObject boss;
 
-    private int phase = 0;
+    public int phase = 0;
     private bool battleStarted = false;
 
     void Update()
@@ -17,12 +18,13 @@ public class BattleManager : MonoBehaviour
         if (phase == 0 && AllEnemiesDead())
         {
             phase = 1;
-            drone.SetActive(true);
+            SpawnWave(wave2Drones);
         }
         else if (phase == 1 && AllEnemiesDead())
         {
             phase = 2;
-            SpawnWave(wave2Enemies);
+            SpawnWave(wave3Enemies);
+            //SpawnWave(wave3Drones);
         }
         else if (phase == 2 && AllEnemiesDead())
         {
