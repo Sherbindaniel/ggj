@@ -536,6 +536,10 @@ PrefabInstance:
       propertyPath: m_SpriteTilingProperty.oldSize.y
       value: 4.45
       objectReference: {fileID: 0}
+    - target: {fileID: 3218393280215740309, guid: 3c7f7102706269e4fb01fa1ef42e8bb0, type: 3}
+      propertyPath: speed
+      value: 1.55
+      objectReference: {fileID: 0}
     - target: {fileID: 3377110018566293262, guid: 3c7f7102706269e4fb01fa1ef42e8bb0, type: 3}
       propertyPath: m_Sprite
       value: 
@@ -554,11 +558,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7422641512054570827, guid: 3c7f7102706269e4fb01fa1ef42e8bb0, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -4.18
+      value: -2.08
       objectReference: {fileID: 0}
     - target: {fileID: 7422641512054570827, guid: 3c7f7102706269e4fb01fa1ef42e8bb0, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -2.1
+      value: -2.12
       objectReference: {fileID: 0}
     - target: {fileID: 7422641512054570827, guid: 3c7f7102706269e4fb01fa1ef42e8bb0, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1172,6 +1176,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3218393280215740309, guid: 3c7f7102706269e4fb01fa1ef42e8bb0, type: 3}
+      propertyPath: speed
+      value: 1.55
+      objectReference: {fileID: 0}
     - target: {fileID: 3377110018566293262, guid: 3c7f7102706269e4fb01fa1ef42e8bb0, type: 3}
       propertyPath: m_Sprite
       value: 
@@ -1260,6 +1268,10 @@ PrefabInstance:
     - target: {fileID: 1900934659193419957, guid: 3c7f7102706269e4fb01fa1ef42e8bb0, type: 3}
       propertyPath: m_SpriteTilingProperty.oldSize.y
       value: 4.45
+      objectReference: {fileID: 0}
+    - target: {fileID: 3218393280215740309, guid: 3c7f7102706269e4fb01fa1ef42e8bb0, type: 3}
+      propertyPath: speed
+      value: 1.55
       objectReference: {fileID: 0}
     - target: {fileID: 3377110018566293262, guid: 3c7f7102706269e4fb01fa1ef42e8bb0, type: 3}
       propertyPath: m_Sprite
@@ -1896,6 +1908,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7450002955135484030, guid: 3c7f7102706269e4fb01fa1ef42e8bb0, type: 3}
+      propertyPath: speed
+      value: 1.55
+      objectReference: {fileID: 0}
+    - target: {fileID: 7450002955135484030, guid: 3c7f7102706269e4fb01fa1ef42e8bb0, type: 3}
       propertyPath: patrolDistance
       value: 2
       objectReference: {fileID: 0}
@@ -2498,6 +2514,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7450002955135484030, guid: 3c7f7102706269e4fb01fa1ef42e8bb0, type: 3}
+      propertyPath: speed
+      value: 1.55
+      objectReference: {fileID: 0}
     - target: {fileID: 7940867843789715638, guid: 3c7f7102706269e4fb01fa1ef42e8bb0, type: 3}
       propertyPath: m_Name
       value: soldier_0 (1)
@@ -2650,6 +2670,10 @@ PrefabInstance:
     - target: {fileID: 7422641512054570827, guid: 3c7f7102706269e4fb01fa1ef42e8bb0, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7450002955135484030, guid: 3c7f7102706269e4fb01fa1ef42e8bb0, type: 3}
+      propertyPath: speed
+      value: 0.55
       objectReference: {fileID: 0}
     - target: {fileID: 7450002955135484030, guid: 3c7f7102706269e4fb01fa1ef42e8bb0, type: 3}
       propertyPath: patrolDistance
@@ -4226,6 +4250,10 @@ PrefabInstance:
     - target: {fileID: 7422641512054570827, guid: 3c7f7102706269e4fb01fa1ef42e8bb0, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7450002955135484030, guid: 3c7f7102706269e4fb01fa1ef42e8bb0, type: 3}
+      propertyPath: speed
+      value: 1.55
       objectReference: {fileID: 0}
     - target: {fileID: 7450002955135484030, guid: 3c7f7102706269e4fb01fa1ef42e8bb0, type: 3}
       propertyPath: patrolDistance
